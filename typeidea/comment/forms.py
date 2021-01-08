@@ -1,5 +1,6 @@
 from django import forms
 from .models import Comment
+import mistune
 
 
 class CommentForm(forms.ModelForm):
@@ -36,6 +37,8 @@ class CommentForm(forms.ModelForm):
         content = self.cleaned_data.get('content')
         if len(content) == 0:
             raise forms.ValidationError('评论不能为空')
+        content = mistune.markdown(content)
+        return content
 
     class Meta:
         model = Comment
